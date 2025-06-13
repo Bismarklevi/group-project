@@ -1,26 +1,11 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { View, Text, StyleSheet } from 'react-native';
-
-// Placeholder screens
-const PlaceholderScreen = ({ title }: { title: string }) => (
-  <View style={styles.container}>
-    <Text style={styles.text}>{title}</Text>
-  </View>
-);
-
-const HomeScreen = () => <PlaceholderScreen title="Home" />;
-const SearchScreen = () => <PlaceholderScreen title="Search" />;
-const NewScreen = () => <PlaceholderScreen title="New" />;
-const ProfileScreen = () => <PlaceholderScreen title="Profile" />;
-
-type TabParamList = {
-  Home: undefined;
-  Search: undefined;
-  New: undefined;
-  Profile: undefined;
-};
+import HomeScreen from '../screens/HomeScreen';
+import SearchScreen from '../screens/SearchScreen';
+import NewScreen from '../screens/NewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import type { TabParamList } from './types';
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -32,19 +17,13 @@ const TabNavigator = () => {
           backgroundColor: '#000',
           borderTopColor: '#222',
         },
-        tabBarActiveTintColor: '#E50914',
-        tabBarInactiveTintColor: '#FFF',
-        headerStyle: {
-          backgroundColor: '#000',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveTintColor: '#666',
+        headerShown: false,
       }}
     >
       <Tab.Screen
-        name="Home"
+        name="HomeTab"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -53,7 +32,16 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="Search"
+        name="NewTab"
+        component={NewScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="play" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SearchTab"
         component={SearchScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -62,16 +50,7 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="New"
-        component={NewScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
+        name="ProfileTab"
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -82,19 +61,5 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-});
 
 export default TabNavigator; 

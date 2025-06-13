@@ -1,9 +1,29 @@
+import type { NavigatorScreenParams } from '@react-navigation/native';
+
+export type TabParamList = {
+  HomeTab: undefined;
+  SearchTab: undefined;
+  NewTab: undefined;
+  ProfileTab: undefined;
+};
+
 export type RootStackParamList = {
-  Logo: undefined;
+  Logo: undefined
   Login: undefined;
-  SignUp: undefined;
-  ProfileSelect: undefined;
-  MainTabs: undefined;
+  Signup: undefined;
+  ProfileSelection: undefined;
+  MainTabs: NavigatorScreenParams<TabParamList>;
+  MovieDetails: {
+    movieId: number;
+  };
+  ViewAll: {
+    category: string;
+    title: string;
+  };
+  EditProfile: {
+    isNewProfile: boolean;
+    profileId?: string;
+  };
 };
 
 declare global {

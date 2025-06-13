@@ -1,14 +1,89 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
-import TabNavigator from './TabNavigator';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { RootStackParamList, TabParamList } from './types';
+import { COLORS } from '../services/constants';
+
+// Screens
 import LoginScreen from '../screens/LoginScreen';
-import SignUpScreen from '../screens/SignUpScreen';
-import LogoScreen from '../screens/LogoScreen';
-import ProfileSelectScreen from '../screens/ProfileSelectScreen';
+import SignupScreen from '../screens/SignupScreen';
+import ProfileSelectionScreen from '../screens/ProfileSelectionScreen';
+import HomeScreen from '../screens/HomeScreen';
+import SearchScreen from '../screens/SearchScreen';
+import NewScreen from '../screens/NewScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import MovieDetailsScreen from '../screens/MovieDetailsScreen';
+import ViewAllScreen from '../screens/ViewAllScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+
+type HomeScreenProps = BottomTabScreenProps<TabParamList, 'HomeTab'>;
+type SearchScreenProps = BottomTabScreenProps<TabParamList, 'SearchTab'>;
+type NewScreenProps = BottomTabScreenProps<TabParamList, 'NewTab'>;
+type ProfileScreenProps = BottomTabScreenProps<TabParamList, 'ProfileTab'>;
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: COLORS.BACKGROUND,
+          borderTopWidth: 0,
+        },
+        tabBarActiveTintColor: COLORS.TEXT.PRIMARY,
+        tabBarInactiveTintColor: COLORS.TEXT.SECONDARY,
+      }}
+    >
+      <Tab.Screen
+        name="HomeTab"
+        component={HomeScreen as React.FC<HomeScreenProps>}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SearchTab"
+        component={SearchScreen as React.FC<SearchScreenProps>}
+        options={{
+          tabBarLabel: 'Search',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="search" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="NewTab"
+        component={NewScreen as React.FC<NewScreenProps>}
+        options={{
+          tabBarLabel: 'New',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="play" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileScreen as React.FC<ProfileScreenProps>}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 const AppNavigator = () => {
   return (
@@ -16,14 +91,37 @@ const AppNavigator = () => {
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}
-        initialRouteName="Logo"
       >
-        <Stack.Screen name="Logo" component={LogoScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="ProfileSelect" component={ProfileSelectScreen} />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Login'>>} 
+        />
+        <Stack.Screen 
+          name="Signup" 
+          component={SignupScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Signup'>>} 
+        />
+        <Stack.Screen 
+          name="ProfileSelection" 
+          component={ProfileSelectionScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'ProfileSelection'>>} 
+        />
         <Stack.Screen name="MainTabs" component={TabNavigator} />
+        <Stack.Screen
+          name="MovieDetails"
+          component={MovieDetailsScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'MovieDetails'>>}
+          options={{
+            animation: 'slide_from_bottom',
+          }}
+        />
+        <Stack.Screen
+          name="ViewAll"
+          component={ViewAllScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'ViewAll'>>}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfileScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'EditProfile'>>}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

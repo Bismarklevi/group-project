@@ -1,0 +1,17 @@
+// Base64 encoded 1x1 pixel PNG with a dark gray color (#222222)
+const PLACEHOLDER = { uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==' };
+
+export const PLACEHOLDER_IMAGES = {
+  POSTER: {
+    uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI/wL/D7kh9QAAAABJRU5ErkJggg==',
+  },
+  BACKDROP: {
+    uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI/wL/D7kh9QAAAABJRU5ErkJggg==',
+  },
+  PREVIEW: {
+    uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI/wL/D7kh9QAAAABJRU5ErkJggg==',
+  },
+  AVATAR: {
+    uri: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/+F9PQAI/wL/D7kh9QAAAABJRU5ErkJggg==',
+  },
+}; 

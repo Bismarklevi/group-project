@@ -1,38 +1,57 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Animated,
+  Dimensions,
+} from 'react-native';
+import { COLORS } from '../services/constants';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Logo'>;
 
+const { width } = Dimensions.get('window');
+const LOGO_SIZE = width * 0.4;
+
 const LogoScreen: React.FC<Props> = ({ navigation }) => {
-  const fadeAnim = new Animated.Value(0);
+  const opacity = new Animated.Value(0);
+  const scale = new Animated.Value(1.3);
 
   useEffect(() => {
-    // Fade in animation
-    Animated.sequence([
-      Animated.timing(fadeAnim, {
+    // Fade in and scale down animation
+    Animated.parallel([
+      Animated.timing(opacity, {
         toValue: 1,
         duration: 1000,
         useNativeDriver: true,
       }),
-      // Hold for 1.5 seconds
-      Animated.delay(1500),
-      // Fade out
-      Animated.timing(fadeAnim, {
-        toValue: 0,
+      Animated.timing(scale, {
+        toValue: 1,
         duration: 1000,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      // Navigate to Login screen after animation
-      navigation.replace('Login');
-    });
-  }, [fadeAnim, navigation]);
+    ]).start();
+
+    // Navigate to profile selection after animation
+    const timer = setTimeout(() => {
+      navigation.replace('ProfileSelection');
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Animated.Text style={[styles.logo, { opacity: fadeAnim }]}>
+      <Animated.Text
+        style={[
+          styles.logo,
+          {
+            opacity,
+            transform: [{ scale }],
+          },
+        ]}
+      >
         STREAMIO
       </Animated.Text>
     </View>
@@ -42,13 +61,13 @@ const LogoScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: COLORS.BACKGROUND,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logo: {
-    color: '#E50914',
-    fontSize: 48,
+    color: COLORS.PRIMARY,
+    fontSize: LOGO_SIZE * 0.25,
     fontWeight: 'bold',
     letterSpacing: 2,
   },

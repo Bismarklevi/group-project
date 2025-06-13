@@ -24,11 +24,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       return;
     }
     // In a real app, you would validate credentials here
-    navigation.replace('ProfileSelect');
+    navigation.replace('ProfileSelection');
   };
 
   const handleSignUp = () => {
-    navigation.navigate('SignUp');
+    navigation.navigate('Signup');
   };
 
   return (
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: '#fff',
     borderWidth: 1,
-    borderColor: '#E50914',
   },
   signInButton: {
     backgroundColor: '#E50914',

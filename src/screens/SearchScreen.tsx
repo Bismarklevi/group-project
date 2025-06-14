@@ -16,12 +16,12 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../navigation/types';
+import type { Movie } from '../types/movie';
 import { COLORS } from '../services/constants';
 import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 import {
   searchMovies,
   getImageUrl,
-  type Movie,
 } from '../services/api';
 
 type Props = CompositeScreenProps<
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   searchInput: {
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -10 }],
   },
   searchButton: {
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
     width: 48,
     height: 48,
     borderRadius: 8,
@@ -181,7 +181,8 @@ const styles = StyleSheet.create({
     aspectRatio: 2 / 3,
     borderRadius: 4,
     marginBottom: 8,
-  },
+    overflow: 'hidden',
+  } as const,
   movieTitle: {
     color: COLORS.TEXT.PRIMARY,
     fontSize: 14,

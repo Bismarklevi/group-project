@@ -1,72 +1,11 @@
 import axios from 'axios';
 import Constants from 'expo-constants';
+import { Movie, MovieDetails, Cast, Crew, Credits, Video, SearchResult } from '@/types/movie';
+
 
 const TMDB_API_KEY = Constants.expoConfig?.extra?.tmdbApiKey || '91ba9439b43829229892d98d998964ee';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
-
-export interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  backdrop_path: string;
-  overview: string;
-  release_date: string;
-  vote_average: number;
-  genre_ids: number[];
-}
-
-export interface MovieDetails extends Omit<Movie, 'genre_ids'> {
-  genres: { id: number; name: string }[];
-  runtime: number;
-  status: string;
-  tagline: string;
-  vote_count: number;
-  budget: number;
-  revenue: number;
-  spoken_languages: { english_name: string }[];
-  production_companies: {
-    id: number;
-    name: string;
-    logo_path: string | null;
-  }[];
-}
-
-export interface Cast {
-  id: number;
-  name: string;
-  character: string;
-  profile_path: string | null;
-}
-
-export interface Crew {
-  id: number;
-  name: string;
-  job: string;
-  department: string;
-  profile_path: string | null;
-}
-
-export interface Credits {
-  cast: Cast[];
-  crew: Crew[];
-}
-
-export interface Video {
-  id: string;
-  key: string;
-  name: string;
-  site: string;
-  type: string;
-  official: boolean;
-}
-
-export interface SearchResult {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -78,16 +17,6 @@ const api = axios.create({
 export const getImageUrl = (path: string | null, size: string = 'w500'): string | null => {
   if (!path) return null;
   return `${IMAGE_BASE_URL}/${size}${path}`;
-};
-
-export const getTrending = async (): Promise<Movie[]> => {
-  try {
-    const response = await api.get<SearchResult>('/trending/movie/week');
-    return response.data.results;
-  } catch (error) {
-    console.error('Error fetching trending movies:', error);
-    return [];
-  }
 };
 
 export const getPopular = async (): Promise<Movie[]> => {

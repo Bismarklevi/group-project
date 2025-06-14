@@ -9,11 +9,15 @@ import {
   Dimensions,
   ActivityIndicator,
   Linking,
+  ImageStyle,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
+import type { MovieDetails, Credits, Video, Movie, Cast, Crew } from '../types/movie';
 import {
   getMovieDetails,
   getMovieCredits,
@@ -21,27 +25,20 @@ import {
   getSimilarMovies,
   getRecommendedMovies,
   getImageUrl,
-  type MovieDetails,
-  type Credits,
-  type Video,
-  type Movie,
 } from '../services/api';
 import { COLORS } from '../services/constants';
 import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'MovieDetails'>;
 
-type Cast = {
-  id: number;
-  name: string;
-  character: string;
-  profile_path: string | null;
-};
-
 const { width } = Dimensions.get('window');
 const POSTER_WIDTH = width * 0.33;
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5;
 const CAST_IMAGE_SIZE = width * 0.2;
+
+const imageStyle: ImageStyle = {
+  overflow: 'hidden',
+};
 
 const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
   const { movieId } = route.params;
@@ -104,18 +101,24 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
     }
   };
 
-  const renderCastMember = ({ id, name, character, profile_path }: Cast) => (
-    <View key={id} style={styles.castMember}>
+  const renderCastMember = (cast: Cast) => (
+    <View key={cast.id} style={styles.castMember}>
       <Image
         source={
-          profile_path
-            ? { uri: getImageUrl(profile_path) || undefined }
+          cast.profile_path
+            ? { uri: getImageUrl(cast.profile_path) || undefined }
             : PLACEHOLDER_IMAGES.PREVIEW
         }
-        style={styles.castImage}
+        style={{
+          width: CAST_IMAGE_SIZE,
+          height: CAST_IMAGE_SIZE,
+          borderRadius: CAST_IMAGE_SIZE / 2,
+          marginBottom: 8,
+          resizeMode: 'cover',
+        } satisfies ImageStyle}
       />
-      <Text style={styles.castName} numberOfLines={1}>{name}</Text>
-      <Text style={styles.castCharacter} numberOfLines={1}>{character}</Text>
+      <Text style={styles.castName} numberOfLines={1}>{cast.name}</Text>
+      <Text style={styles.castCharacter} numberOfLines={1}>{cast.character}</Text>
     </View>
   );
 
@@ -131,7 +134,12 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
             ? { uri: getImageUrl(movie.poster_path) || undefined }
             : PLACEHOLDER_IMAGES.POSTER
         }
-        style={styles.posterImage}
+        style={{
+          width: POSTER_WIDTH,
+          height: POSTER_HEIGHT,
+          borderRadius: 8,
+          resizeMode: 'cover',
+        } satisfies ImageStyle}
       />
     </TouchableOpacity>
   );
@@ -144,7 +152,14 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
     );
   }
 
-  const director = credits.crew.find(person => person.job === 'Director');
+  const director = credits.crew.find((person: Crew) => person.job === 'Director');
+
+  const genreTagStyle = {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -157,7 +172,11 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                 ? { uri: getImageUrl(details.backdrop_path, 'original') || undefined }
                 : PLACEHOLDER_IMAGES.BACKDROP
             }
-            style={styles.backdropImage}
+            style={{
+              width: '100%',
+              height: '100%',
+              resizeMode: 'cover',
+            }}
           />
           <TouchableOpacity
             style={styles.backButton}
@@ -190,8 +209,8 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
 
           {/* Genres */}
           <View style={styles.genresContainer}>
-            {details.genres.map(genre => (
-              <View key={genre.id} style={styles.genreTag}>
+            {details.genres.map((genre: { id: number; name: string }) => (
+              <View key={genre.id} style={genreTagStyle}>
                 <Text style={styles.genreText}>{genre.name}</Text>
               </View>
             ))}
@@ -232,11 +251,28 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
           {credits.cast.length > 0 && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Cast</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.castContainer}>
-                  {credits.cast.slice(0, 10).map(renderCastMember)}
-                </View>
-              </ScrollView>
+              <View style={styles.castList}>
+                {credits.cast.map((cast: Cast) => (
+                  <View key={cast.id} style={styles.castMember}>
+                    <Image
+                      source={
+                        cast.profile_path
+                          ? { uri: getImageUrl(cast.profile_path) || undefined }
+                          : PLACEHOLDER_IMAGES.PREVIEW
+                      }
+                      style={{
+                        width: CAST_IMAGE_SIZE,
+                        height: CAST_IMAGE_SIZE,
+                        borderRadius: CAST_IMAGE_SIZE / 2,
+                        marginBottom: 8,
+                        resizeMode: 'cover',
+                      } satisfies ImageStyle}
+                    />
+                    <Text style={styles.castName} numberOfLines={1}>{cast.name}</Text>
+                    <Text style={styles.castCharacter} numberOfLines={1}>{cast.character}</Text>
+                  </View>
+                ))}
+              </View>
             </View>
           )}
 
@@ -273,11 +309,29 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
           {similarMovies.length > 0 && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Similar Movies</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.moviesRow}>
-                  {similarMovies.map(renderMovie)}
-                </View>
-              </ScrollView>
+              <View style={styles.movieList}>
+                {similarMovies.map((movie: Movie) => (
+                  <TouchableOpacity
+                    key={movie.id}
+                    style={styles.movieItem}
+                    onPress={() => navigation.navigate('MovieDetails', { movieId: movie.id })}
+                  >
+                    <Image
+                      source={
+                        movie.poster_path
+                          ? { uri: getImageUrl(movie.poster_path) || undefined }
+                          : PLACEHOLDER_IMAGES.POSTER
+                      }
+                      style={{
+                        width: POSTER_WIDTH,
+                        height: POSTER_HEIGHT,
+                        borderRadius: 8,
+                        resizeMode: 'cover',
+                      } satisfies ImageStyle}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           )}
 
@@ -285,11 +339,29 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
           {recommendedMovies.length > 0 && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Recommended</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.moviesRow}>
-                  {recommendedMovies.map(renderMovie)}
-                </View>
-              </ScrollView>
+              <View style={styles.movieList}>
+                {recommendedMovies.map((movie: Movie) => (
+                  <TouchableOpacity
+                    key={movie.id}
+                    style={styles.movieItem}
+                    onPress={() => navigation.navigate('MovieDetails', { movieId: movie.id })}
+                  >
+                    <Image
+                      source={
+                        movie.poster_path
+                          ? { uri: getImageUrl(movie.poster_path) || undefined }
+                          : PLACEHOLDER_IMAGES.POSTER
+                      }
+                      style={{
+                        width: POSTER_WIDTH,
+                        height: POSTER_HEIGHT,
+                        borderRadius: 8,
+                        resizeMode: 'cover',
+                      } satisfies ImageStyle}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           )}
         </View>
@@ -305,29 +377,27 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: COLORS.BACKGROUND,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.BACKGROUND,
   },
   scrollView: {
     flex: 1,
   },
   backdropContainer: {
-    position: 'relative',
     height: width * 0.6,
-    width: '100%',
-  },
-  backdropImage: {
-    width: '100%',
-    height: '100%',
+    position: 'relative',
   },
   backButton: {
     position: 'absolute',
     top: 16,
     left: 16,
-    padding: 8,
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: COLORS.OVERLAY.DARK,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   infoContainer: {
     padding: 16,
@@ -350,7 +420,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   metadataText: {
-    color: COLORS.TEXT.PRIMARY,
+    color: COLORS.TEXT.SECONDARY,
     fontSize: 14,
   },
   metadataDot: {
@@ -360,14 +430,8 @@ const styles = StyleSheet.create({
   genresContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 16,
     gap: 8,
-  },
-  genreTag: {
-    backgroundColor: COLORS.SURFACE,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    marginBottom: 16,
   },
   genreText: {
     color: COLORS.TEXT.PRIMARY,
@@ -419,16 +483,18 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT.PRIMARY,
     fontSize: 16,
     lineHeight: 24,
+    marginBottom: 24,
   },
   directorName: {
     color: COLORS.TEXT.PRIMARY,
     fontSize: 16,
   },
-  castContainer: {
+  castList: {
     flexDirection: 'row',
     gap: 16,
   },
   castMember: {
+    marginRight: 16,
     alignItems: 'center',
     width: CAST_IMAGE_SIZE,
   },
@@ -437,7 +503,9 @@ const styles = StyleSheet.create({
     height: CAST_IMAGE_SIZE,
     borderRadius: CAST_IMAGE_SIZE / 2,
     marginBottom: 8,
-  },
+    resizeMode: 'cover',
+    overflow: 'hidden',
+  } as const,
   castName: {
     color: COLORS.TEXT.PRIMARY,
     fontSize: 14,
@@ -450,35 +518,38 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   additionalInfo: {
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
     borderRadius: 8,
     padding: 16,
   },
   infoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 8,
   },
   infoLabel: {
+    flex: 1,
     color: COLORS.TEXT.SECONDARY,
     fontSize: 14,
   },
   infoValue: {
+    flex: 2,
     color: COLORS.TEXT.PRIMARY,
     fontSize: 14,
   },
-  moviesRow: {
+  movieList: {
     flexDirection: 'row',
     gap: 12,
   },
   movieItem: {
-    width: POSTER_WIDTH,
+    marginRight: 12,
   },
   posterImage: {
     width: POSTER_WIDTH,
     height: POSTER_HEIGHT,
-    borderRadius: 4,
-  },
+    borderRadius: 8,
+    resizeMode: 'cover',
+    overflow: 'hidden',
+  } as const,
 });
 
 export default MovieDetailsScreen; 

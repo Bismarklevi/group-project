@@ -18,8 +18,8 @@ import { Ionicons } from '@expo/vector-icons';
 import {
   getMoviesByCategory,
   getImageUrl,
-  type Movie,
 } from '../services/api';
+import { Movie } from '@/types/movie';
 import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 import { CONTENT_SECTIONS, COLORS } from '../services/constants';
 

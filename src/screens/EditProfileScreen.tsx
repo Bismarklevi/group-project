@@ -9,6 +9,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +18,8 @@ import type { RootStackParamList } from '../navigation/types';
 import { COLORS } from '../services/constants';
 import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 import { addProfile, updateProfile, deleteProfile, getProfile, type Profile } from '../services/profiles';
+
+const { width } = Dimensions.get('window');
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditProfile'>;
 
@@ -225,9 +228,9 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    backgroundColor: COLORS.BACKGROUND,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: COLORS.BACKGROUND,
   },
   header: {
     flexDirection: 'row',
@@ -235,22 +238,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.SURFACE,
+    borderBottomColor: COLORS.SURFACE.DEFAULT,
   },
   backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 8,
   },
   title: {
+    flex: 1,
     color: COLORS.TEXT.PRIMARY,
     fontSize: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginHorizontal: 16,
   },
   saveButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    padding: 8,
   },
   saveButtonText: {
     color: COLORS.PRIMARY,
@@ -272,42 +274,38 @@ const styles = StyleSheet.create({
   },
   editAvatarButton: {
     position: 'absolute',
+    right: width * 0.3,
     bottom: 24,
-    right: '50%',
-    marginRight: -60,
-    backgroundColor: COLORS.SURFACE,
-    width: 40,
-    height: 40,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
+    padding: 8,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   form: {
     padding: 16,
-    gap: 24,
   },
   inputContainer: {
-    gap: 8,
+    marginBottom: 24,
   },
   label: {
     color: COLORS.TEXT.PRIMARY,
     fontSize: 16,
-    fontWeight: 'bold',
+    marginBottom: 8,
   },
   input: {
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
     borderRadius: 8,
     padding: 12,
     color: COLORS.TEXT.PRIMARY,
     fontSize: 16,
   },
   colorSection: {
-    gap: 12,
+    marginBottom: 24,
   },
   colorGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 16,
+    marginTop: 8,
+    gap: 12,
   },
   colorOption: {
     width: 40,
@@ -320,17 +318,18 @@ const styles = StyleSheet.create({
   },
   kidsSection: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 24,
   },
   kidsToggle: {
     padding: 4,
   },
   toggleTrack: {
-    width: 48,
+    width: 44,
     height: 24,
     borderRadius: 12,
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.LIGHT,
     padding: 2,
   },
   toggleThumb: {
@@ -340,16 +339,20 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.TEXT.PRIMARY,
   },
   deleteButton: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 8,
-    backgroundColor: COLORS.SURFACE,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    padding: 16,
+    marginTop: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: COLORS.SURFACE.DEFAULT,
   },
   deleteButtonText: {
-    color: COLORS.ERROR,
+    color: COLORS.STATUS.ERROR,
     fontSize: 16,
     fontWeight: 'bold',
+    marginLeft: 8,
   },
 });
 

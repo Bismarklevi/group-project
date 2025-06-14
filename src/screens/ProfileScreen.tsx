@@ -61,7 +61,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out" size={24} color={COLORS.ERROR} />
+          <Ionicons name="log-out" size={24} color={COLORS.STATUS.ERROR} />
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
 
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   header: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.SURFACE,
+    borderBottomColor: COLORS.SURFACE.DEFAULT,
   },
   title: {
     color: COLORS.TEXT.PRIMARY,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.SURFACE,
+    borderBottomColor: COLORS.SURFACE.DEFAULT,
   },
   profileImage: {
     width: 80,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.SURFACE,
+    borderBottomColor: COLORS.SURFACE.DEFAULT,
   },
   settingIcon: {
     width: 40,
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: COLORS.SURFACE,
+    backgroundColor: COLORS.SURFACE.DEFAULT
   },
   logoutText: {
-    color: COLORS.ERROR,
+    color: COLORS.STATUS.ERROR,
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 8,

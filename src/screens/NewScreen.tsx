@@ -14,14 +14,15 @@ import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../navigation/types';
-import { COLORS } from '../services/constants';
+import { Ionicons } from '@expo/vector-icons';
+import { COLORS, TYPOGRAPHY } from '../services/constants';
 import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 import {
   getUpcomingMovies,
   getNowPlayingMovies,
   getImageUrl,
-  type Movie,
 } from '../services/api';
+import type { Movie } from '../types/movie';
 
 type Props = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'NewTab'>,
@@ -29,8 +30,7 @@ type Props = CompositeScreenProps<
 >;
 
 const { width } = Dimensions.get('window');
-const POSTER_WIDTH = width * 0.33;
-const POSTER_HEIGHT = POSTER_WIDTH * 1.5;
+const CARD_IMAGE_HEIGHT = width * 0.4;
 
 const NewScreen: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
@@ -57,26 +57,56 @@ const NewScreen: React.FC<Props> = ({ navigation }) => {
     }
   };
 
-  const renderMovie = (movie: Movie) => (
+  const renderContentCard = (movie: Movie, isNewArrival: boolean = false) => (
     <TouchableOpacity
       key={movie.id}
-      style={styles.movieItem}
+      style={styles.card}
       onPress={() => navigation.navigate('MovieDetails', { movieId: movie.id })}
     >
       <Image
         source={
-          movie.poster_path
-            ? { uri: getImageUrl(movie.poster_path) || '' }
-            : PLACEHOLDER_IMAGES.POSTER
+          movie.backdrop_path
+            ? { uri: getImageUrl(movie.backdrop_path) || '' }
+            : PLACEHOLDER_IMAGES.BACKDROP
         }
-        style={styles.posterImage}
+        style={styles.cardImage}
       />
-      <Text style={styles.movieTitle} numberOfLines={2}>
-        {movie.title}
-      </Text>
+      <View style={styles.cardContent}>
+        <View style={styles.cardHeader}>
+          <View>
+            <Text style={styles.cardTitle}>{movie.title}</Text>
       <Text style={styles.releaseDate}>
         {new Date(movie.release_date).toLocaleDateString()}
       </Text>
+          </View>
+          {isNewArrival && (
+            <View style={styles.newArrivalBadge}>
+              <Text style={styles.newArrivalText}>New Arrival</Text>
+            </View>
+          )}
+        </View>
+        <Text style={styles.overview} numberOfLines={2}>
+          {movie.overview}
+        </Text>
+        <View style={styles.cardFooter}>
+          <View style={styles.genreTags}>
+            <View style={styles.genreTag}>
+              <Text style={styles.genreText}>Drama</Text>
+            </View>
+            <View style={styles.genreTag}>
+              <Text style={styles.genreText}>Suspense</Text>
+            </View>
+          </View>
+          <View style={styles.actions}>
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="notifications-outline" size={24} color={COLORS.TEXT.PRIMARY} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionButton}>
+              <Ionicons name="share-outline" size={24} color={COLORS.TEXT.PRIMARY} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 
@@ -90,25 +120,18 @@ const NewScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Notifications</Text>
+      </View>
       <ScrollView style={styles.scrollView}>
-        {/* Now Playing */}
+        {/* New Arrivals */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Now Playing</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.moviesRow}>
-              {nowPlayingMovies.map(renderMovie)}
-            </View>
-          </ScrollView>
+          {nowPlayingMovies.map(movie => renderContentCard(movie, true))}
         </View>
 
         {/* Coming Soon */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Coming Soon</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <View style={styles.moviesRow}>
-              {upcomingMovies.map(renderMovie)}
-            </View>
-          </ScrollView>
+          {upcomingMovies.map(movie => renderContentCard(movie))}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -126,41 +149,91 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  header: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.BORDER.DEFAULT,
+  },
+  headerTitle: {
+    ...TYPOGRAPHY.STYLES.H1,
+    color: COLORS.TEXT.PRIMARY,
+  },
   scrollView: {
     flex: 1,
   },
   section: {
-    marginBottom: 24,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
-  sectionTitle: {
-    color: COLORS.TEXT.PRIMARY,
-    fontSize: 24,
-    fontWeight: 'bold',
+  card: {
+    backgroundColor: COLORS.SURFACE.DEFAULT,
+    borderRadius: 12,
     marginBottom: 16,
-    paddingHorizontal: 16,
+    overflow: 'hidden',
   },
-  moviesRow: {
+  cardImage: {
+    width: '100%',
+    height: CARD_IMAGE_HEIGHT,
+    resizeMode: 'cover',
+  },
+  cardContent: {
+    padding: 16,
+  },
+  cardHeader: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  movieItem: {
-    width: POSTER_WIDTH,
-  },
-  posterImage: {
-    width: POSTER_WIDTH,
-    height: POSTER_HEIGHT,
-    borderRadius: 4,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     marginBottom: 8,
   },
-  movieTitle: {
+  cardTitle: {
+    ...TYPOGRAPHY.STYLES.H3,
     color: COLORS.TEXT.PRIMARY,
-    fontSize: 14,
     marginBottom: 4,
   },
   releaseDate: {
+    ...TYPOGRAPHY.STYLES.BODY_SMALL,
     color: COLORS.TEXT.SECONDARY,
-    fontSize: 12,
+  },
+  newArrivalBadge: {
+    backgroundColor: COLORS.PRIMARY,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  newArrivalText: {
+    ...TYPOGRAPHY.STYLES.LABEL,
+    color: COLORS.TEXT.PRIMARY,
+  },
+  overview: {
+    ...TYPOGRAPHY.STYLES.BODY,
+    color: COLORS.TEXT.SECONDARY,
+    marginBottom: 16,
+  },
+  cardFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  genreTags: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  genreTag: {
+    backgroundColor: COLORS.SURFACE.LIGHT,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+  },
+  genreText: {
+    ...TYPOGRAPHY.STYLES.LABEL,
+    color: COLORS.TEXT.PRIMARY,
+  },
+  actions: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  actionButton: {
+    padding: 4,
   },
 });
 

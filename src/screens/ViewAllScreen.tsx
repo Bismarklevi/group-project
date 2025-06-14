@@ -18,8 +18,8 @@ import { PLACEHOLDER_IMAGES } from '../assets/placeholder';
 import {
   getMoviesByCategory,
   getImageUrl,
-  type Movie,
 } from '../services/api';
+import { Movie } from '@/types/movie';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ViewAll'>;
 

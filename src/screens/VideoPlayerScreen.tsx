@@ -148,7 +148,7 @@ const VideoPlayerScreen: React.FC<Props> = ({ route, navigation }) => {
               <View style={[styles.progress, { width: `${progress}%` }]} />
             </View>
             
-            <View style={styles.controlButtons}>
+            {/* <View style={styles.controlButtons}>
               <TouchableOpacity style={styles.controlButton}>
                 <Ionicons name="speedometer-outline" size={24} color="white" />
                 <Text style={styles.controlText}>Speed (1x)</Text>
@@ -159,21 +159,21 @@ const VideoPlayerScreen: React.FC<Props> = ({ route, navigation }) => {
                 <Text style={styles.controlText}>Lock</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.controlButton}>
+              {/* <TouchableOpacity style={styles.controlButton}>
                 <Ionicons name="list" size={24} color="white" />
                 <Text style={styles.controlText}>Episodes</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <TouchableOpacity style={styles.controlButton}>
+              {/* <TouchableOpacity style={styles.controlButton}>
                 <Ionicons name="text" size={24} color="white" />
                 <Text style={styles.controlText}>Subtitles</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
 
-              <TouchableOpacity style={styles.controlButton}>
+              {/* <TouchableOpacity style={styles.controlButton}>
                 <Ionicons name="play-skip-forward" size={24} color="white" />
                 <Text style={styles.controlText}>Next Ep.</Text>
               </TouchableOpacity>
-            </View>
+             </View> */}
           </View>
         </View>
       )}

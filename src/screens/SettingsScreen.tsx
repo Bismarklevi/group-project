@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
 import { COLORS } from '../services/constants';
+import LoginScreen from './LoginScreen';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
@@ -89,7 +90,9 @@ const SettingsScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.logoutButton}>
+        <TouchableOpacity 
+            style={styles.logoutButton}
+            >
           <Text style={styles.logoutText}>Log Out</Text>
         </TouchableOpacity>
       </ScrollView>

@@ -31,6 +31,10 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate('EditProfile', { isNewProfile: false, profileId: '1' });
   };
 
+  const handleSettingPress = (settingId: string) => {
+    navigation.navigate('Settings');
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView style={styles.scrollView}>
@@ -50,7 +54,11 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
         <View style={styles.settingsSection}>
           <Text style={styles.sectionTitle}>Settings</Text>
           {SETTINGS_OPTIONS.map(option => (
-            <TouchableOpacity key={option.id} style={styles.settingItem}>
+            <TouchableOpacity 
+              key={option.id} 
+              style={styles.settingItem}
+              onPress={() => handleSettingPress(option.id)}
+            >
               <View style={styles.settingIcon}>
                 <Ionicons name={option.icon as any} size={24} color={COLORS.TEXT.PRIMARY} />
               </View>

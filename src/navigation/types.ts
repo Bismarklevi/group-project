@@ -8,7 +8,7 @@ export type TabParamList = {
 };
 
 export type RootStackParamList = {
-  Logo: undefined
+  Logo: undefined;
   Login: undefined;
   Signup: undefined;
   ProfileSelection: undefined;
@@ -24,6 +24,14 @@ export type RootStackParamList = {
     isNewProfile: boolean;
     profileId?: string;
   };
+  VideoPlayer: {
+    videoId: string;
+    title?: string;
+    localUri?: string;
+  };
+  Settings: undefined;
+  Downloads: undefined;
+  NotificationSettings: undefined;
 };
 
 declare global {

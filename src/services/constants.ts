@@ -50,19 +50,20 @@ export const COLORS = {
     DISABLED: '#666666',
   },
   BORDER: {
-    DEFAULT: 'rgba(255, 255, 255, 0.1)',
-    FOCUS: 'rgba(255, 255, 255, 0.2)',
+    DEFAULT: '#333333',
+    LIGHT: '#444444',
+    DARK: '#222222',
   },
   STATUS: {
-    SUCCESS: '#2ECC71',
-    WARNING: '#F1C40F',
-    ERROR: '#E74C3C',
-    INFO: '#3498DB',
+    SUCCESS: '#1DB954',
+    ERROR: '#FF0000',
+    WARNING: '#FFA500',
   },
   OVERLAY: {
     DARK: 'rgba(0, 0, 0, 0.7)',
     LIGHT: 'rgba(255, 255, 255, 0.1)',
   },
+  DANGER: '#FF0000',
 } as const; 
 
 // Typography

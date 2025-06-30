@@ -12,6 +12,7 @@ const api = axios.create({
   params: {
     api_key: TMDB_API_KEY,
   },
+  timeout: 15000, // 15 seconds timeout
 });
 
 export const getImageUrl = (path: string | null, size: string = 'w500'): string | null => {

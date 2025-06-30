@@ -92,12 +92,11 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
 
   const handlePlayTrailer = async () => {
     const trailer = videos.find(video => video.type === 'Trailer') || videos[0];
-    if (trailer) {
-      const url = `https://www.youtube.com/watch?v=${trailer.key}`;
-      const supported = await Linking.canOpenURL(url);
-      if (supported) {
-        await Linking.openURL(url);
-      }
+    if (trailer && details) {
+      navigation.navigate('VideoPlayer', {
+        videoId: trailer.key,
+        title: details.title
+      });
     }
   };
 
@@ -224,7 +223,7 @@ const MovieDetailsScreen: React.FC<Props> = ({ route, navigation }) => {
                 onPress={handlePlayTrailer}
               >
                 <Ionicons name="play" size={24} color={COLORS.BACKGROUND} />
-                <Text style={styles.playText}>Play Trailer</Text>
+                <Text style={styles.playText}>Play</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity style={styles.myListButton}>

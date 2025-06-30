@@ -10,7 +10,7 @@ import { COLORS } from '../services/constants';
 
 // Screens
 import LoginScreen from '../screens/LoginScreen';
-import SignupScreen from '../screens/SignupScreen';
+import SignupScreen from '../screens/SignUpScreen';
 import ProfileSelectionScreen from '../screens/ProfileSelectionScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
@@ -19,6 +19,11 @@ import ProfileScreen from '../screens/ProfileScreen';
 import MovieDetailsScreen from '../screens/MovieDetailsScreen';
 import ViewAllScreen from '../screens/ViewAllScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import LogoScreen from '../screens/LogoScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import DownloadManagerScreen from '../screens/DownloadManagerScreen';
+import NotificationSettingsScreen from '../screens/NotificationSettingsScreen';
+import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 
 type HomeScreenProps = BottomTabScreenProps<TabParamList, 'HomeTab'>;
 type SearchScreenProps = BottomTabScreenProps<TabParamList, 'SearchTab'>;
@@ -95,6 +100,10 @@ const AppNavigator = () => {
         }}
       >
         <Stack.Screen 
+          name="Logo" 
+          component={LogoScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Logo'>>} 
+        />
+        <Stack.Screen 
           name="Login" 
           component={LoginScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Login'>>} 
         />
@@ -121,6 +130,25 @@ const AppNavigator = () => {
         <Stack.Screen
           name="EditProfile"
           component={EditProfileScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'EditProfile'>>}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Settings'>>}
+        />
+        <Stack.Screen
+          name="Downloads"
+          component={DownloadManagerScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'Downloads'>>}
+        />
+        <Stack.Screen
+          name="NotificationSettings"
+          component={NotificationSettingsScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'NotificationSettings'>>}
+        />
+        <Stack.Screen
+          name="VideoPlayer"
+          component={VideoPlayerScreen as React.FC<NativeStackScreenProps<RootStackParamList, 'VideoPlayer'>>}
+          options={{
+            animation: 'slide_from_bottom',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

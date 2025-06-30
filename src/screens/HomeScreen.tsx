@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -29,7 +29,7 @@ type Props = CompositeScreenProps<
 >;
 
 const { width } = Dimensions.get('window');
-const FEATURED_HEIGHT = width * 0.6;
+const FEATURED_HEIGHT = width;
 const POSTER_WIDTH = width * 0.33;
 const POSTER_HEIGHT = POSTER_WIDTH * 1.5;
 
@@ -50,6 +50,19 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState<Record<string, Movie[]>>({});
   const [featuredMovie, setFeaturedMovie] = useState<Movie | null>(null);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('SearchTab')}
+          style={styles.headerButton}
+        >
+          <Ionicons name="search" size={24} color={COLORS.TEXT.PRIMARY} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   useEffect(() => {
     loadMovies();
@@ -212,6 +225,10 @@ const styles = StyleSheet.create({
     width: POSTER_WIDTH,
     height: POSTER_HEIGHT,
     borderRadius: 4,
+  },
+  headerButton: {
+    marginRight: 16,
+    padding: 4,
   },
 });
 

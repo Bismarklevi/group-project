@@ -18,7 +18,7 @@ const PROFILES = [
 const ProfileSelectionScreen: React.FC<Props> = ({ navigation }) => {
   const handleProfileSelect = (profileId: string) => {
     // TODO: Store selected profile in context/state
-    navigation.replace('MainTabs');
+    navigation.replace('MainTabs', { screen: 'HomeTab' });
   };
 
   const handleManageProfiles = () => {
